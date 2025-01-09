@@ -1,0 +1,10 @@
+{
+    "id": "logseq-autoclass-plugin",
+    "name": "AutoClass",
+    "description": "Description of your plugin",
+    "version": "v0.1.0",
+    "main": "dist/index.js",
+    "author": "JWangL5",
+    "license": "MIT"
+}
+  
