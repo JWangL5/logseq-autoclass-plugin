@@ -1,0 +1,44 @@
+name: Build plugin
+on:
+  push:
+    branches:
+      - main
+      
+env:
+  PLUGIN_NAME: logseq-autoclass-plugin
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - uses: pnpm/action-setup@v4.0.0
+        with:
+          version: 9
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Build
+        run: npm run build
+        
+      - name: Create package
+        run: zip logseq-autoclass-plugin.zip dist/index.js README.md demo.gif logo.png package.json
+        
+      - name: Upload Plugin Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./logseq-autoclass-plugin.zip
+          asset_name: logseq-autoclass-plugin.zip
+          asset_content_type: application/zip
